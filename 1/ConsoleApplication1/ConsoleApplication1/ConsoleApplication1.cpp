@@ -1,7 +1,11 @@
 ﻿# include <iostream>
 
-
+using namespace std;
 int main() {
-	std:: cout << "Hell0 world";
+	//cout << "Hell0 world" << endl;
+	int x;
+	cin >> x;
+
+
 	return 0;
 }
