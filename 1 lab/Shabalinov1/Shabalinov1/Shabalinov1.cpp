@@ -52,7 +52,7 @@ Pipe createPipe(int maxId) {
         cin.ignore(10000, '\n');
         cout << "Введите длину: ";
         cin >> P.lenght;
-    } while (P.lenght <= 0 || cin.fail());
+    } while (cin.fail() || P.lenght <= 0);
     
     // Ввод и проверка положительности диаметра
     do {
@@ -61,7 +61,7 @@ Pipe createPipe(int maxId) {
         cout << "Введите диаметр: ";
         cin >> P.diametr;
 
-    } while (P.diametr <= 0 || cin.fail());
+    } while (cin.fail() || P.diametr <= 0);
 
         P.repear = false;
     return P;
@@ -77,9 +77,14 @@ KS createKS( int maxId) {
         cin.clear();
         cin.ignore(10000, '\n');
         cout << "Количество цехов: ";
+        cin >> KS1.numShop;
+    } while (cin.fail() || KS1.numShop <= 0);
+    do {
+        cin.clear();
+        cin.ignore(10000, '\n');
+        cout << "Количество цехов в работе: ";
         cin >> KS1.numShopWorking;
-    } while (KS1.numShopWorking <= 0 || cin.fail());
-    KS1.numShop = KS1.numShopWorking;
+    } while (cin.fail() || KS1.numShopWorking <= 0 || KS1.numShopWorking > KS1.numShop);
 
     return KS1;
 }
@@ -95,9 +100,13 @@ void printKS(const KS &KS1) {
 
     // Изменение состояния ремонта
 void editPipe(vector <Pipe> &P) {
-    cout << "Введите id трубы ";
     int i;
-    cin >> i;
+    do {
+        cin.clear();
+        cin.ignore(10000, '\n');
+        cout << "Введите id трубы ";
+        cin >> i;
+    } while (cin.fail() || i < 0);
     if (P[i].repear) {
         P[i].repear = false;
     }
@@ -108,16 +117,26 @@ void editPipe(vector <Pipe> &P) {
 
     // Ввод и вывот цехов в работу КС
 void editKS(vector <KS> &KS1) {
-    cout << "Введите Id КС ";
     int i;
-    cin >> i;
+    do {
+        cin.clear();
+        cin.ignore(10000, '\n');
+        cout << "Введите id КС ";
+        cin >> i;
+    } while (cin.fail() || i < 0);
+
     bool check = true;
     while (check) {
-        cout << "1 - Ввести цех в работу" << endl
-            << "2 - Вывести цех из работы" << endl
-            << "0 - Назад" << endl;
+   
         int k;
-        cin >> k;
+        do {
+            cout << "1 - Ввести цех в работу" << endl
+                << "2 - Вывести цех из работы" << endl
+                << "0 - Назад" << endl;
+            cin.clear();
+            cin.ignore(10000, '\n');
+            cin >> k;
+        } while (cin.fail() || k < 1 || k>2);
         switch (k)
         {
         case 1:
@@ -165,7 +184,7 @@ void editKS(vector <KS> &KS1) {
                     break;
                 }
                 else {
-                    cout << "Можно убрать максимум " << abs(KS1[i].numShopWorking - shops - 1)
+                    cout << "Можно убрать максимум " << KS1[i].numShopWorking 
                         << " цехов" << endl;
                     break;
                 }
