@@ -136,7 +136,7 @@ void editKS(vector <KS> &KS1) {
             cin.clear();
             cin.ignore(10000, '\n');
             cin >> k;
-        } while (cin.fail() || k < 1 || k>2);
+        } while (cin.fail() || k < 0 || k>2);
         switch (k)
         {
         case 1:
