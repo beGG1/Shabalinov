@@ -39,6 +39,8 @@ void printMenu() {
         << "5. Редактировать КС" << endl
         << "6. Сохранить" << endl
         << "7. Загрузить" << endl
+        << "8. Удалить" << endl
+        << "9. Фильтр" << endl
         << "0. Выход" << endl << endl;
 }
 
@@ -326,6 +328,114 @@ int loadMaxKSID() {
     }
 }
 
+//Удалить Трубу
+void deletePipe(vector <Pipe>& P) {
+    int i;
+
+    //Количество труб, которых надо удалить
+    do {
+        cout << "Введите количество труб, которых нужно удалить" << endl;
+        cin.clear();
+        cin.ignore(10000, '\n');
+        cin >> i;
+    } while (cin.fail() || i < 0 || i>P.size());
+
+
+    //Ввод id этих труб
+    for (int n = 0; n < i; n++) {
+        double idP;
+        int idPipe;
+        do {
+            cout << "Введите id труб, которых нужно удалить" << endl;
+            cin.clear();
+            cin.ignore(10000, '\n');
+            cin >> idP;
+            idPipe = (int)idP;
+        } while (cin.fail() || idPipe < 0);
+
+              
+        //Поиск индекса 
+        int index = -1;
+        for (int m=0; m <P.size(); m++) {
+            if (P[m].id == idPipe) {
+                index = m;
+                break;
+            }
+        }
+        
+        if (index == -1) {
+            cout << "Ошибка. Трубы с таким id не существует" << endl;
+            break;
+        }
+        
+        P.erase(P.begin() + index); //https://coderoad.ru/875103/Как-удалить-элемент-из-std-vector-по-индексу
+    }
+
+
+}
+
+
+
+//Удалить KS
+void deleteKS(vector <KS>& K) {
+    int i;
+
+    //Количество КС, которых надо удалить
+    do {
+        cout << "Введите количество КС, которых нужно удалить" << endl;
+        cin.clear();
+        cin.ignore(10000, '\n');
+        cin >> i;
+    } while (cin.fail() || i < 0 || i>K.size());
+
+
+    //Ввод id этих КС
+    for (int n = 0; n < i; n++) {
+        double idK;
+        int idKS;
+        do {
+            cout << "Введите id КС, которых нужно удалить" << endl;
+            cin.clear();
+            cin.ignore(10000, '\n');
+            cin >> idK;
+            idKS = (int)idK;
+        } while (cin.fail() || idKS < 0);
+
+
+        //Поиск индекса 
+        int index = -1;
+        for (int m = 0; m < K.size(); m++) {
+            if (K[m].id == idKS) {
+                index = m;
+                break;
+            }
+        }
+
+        if (index == -1) {
+            cout << "Ошибка. Трубы с таким id не существует" << endl;
+            break;
+        }
+
+        K.erase(K.begin() + index); //https://coderoad.ru/875103/Как-удалить-элемент-из-std-vector-по-индексу
+    }
+
+
+}
+
+
+    //Фильтр по работающим трубам
+vector <Pipe> pipeFilter(const vector <Pipe>& P) {
+    vector <Pipe> Pipes;
+    for (int i = 0; i < P.size(); i++) {
+        if (P[i].repear) {
+            Pipes.push_back(P[i]);
+        }
+    }
+    return Pipes;
+
+}
+
+
 int main()
 {
     // Распознание кириллицы в консоли  (https://ru.stackoverflow.com/questions/117144/Русские-символы-при-вводе-и-выводе-на-c)
@@ -334,10 +444,24 @@ int main()
 
     vector <Pipe> Pipes;
     vector <KS> KSs;
+    vector <Pipe> filterPipe;
+    vector <KS> filterKS;
 
     while (true) {
-        int maxIdPipe = Pipes.size();
-        int maxIdKS = KSs.size();
+        int maxIdPipe;
+        if (Pipes.size() == 0) {
+            maxIdPipe = 0;
+        }
+        else {
+            maxIdPipe = Pipes[Pipes.size()-1].id + 1;
+        }
+        int maxIdKS;
+        if (KSs.size() == 0) {
+            maxIdKS = 0;
+        }
+        else {
+            maxIdKS = KSs[KSs.size() -1].id + 1;
+        }
         int i;
         printMenu();
         cin >> i;
@@ -391,6 +515,78 @@ int main()
             maxIdKS = loadMaxKSID();
             KSs = loadKS(maxIdKS);
             break;
+        }
+        case 8:
+        {
+            bool check = true;
+            while (check) {
+                int keyDelete;
+                do {
+                    cout << "1. Удалить трубу" << endl
+                        << "2. Удалить КС" << endl
+                        << "0. Назад" << endl;
+                    cin.clear();
+                    cin.ignore(10000, '\n');
+                    cin >> keyDelete;
+                } while (cin.fail() || keyDelete < 0 || keyDelete > 2);
+
+                switch (keyDelete)
+                {
+                case 1:
+                {
+                    deletePipe(Pipes);
+                    break;
+                }
+                
+                case 2:
+                {
+                    deleteKS(KSs);
+                    break;
+                }
+                case 0:
+                {
+                    check = false;
+                    break;
+                }
+                default:
+                    cout << "Ошибка" << endl;
+                    break;
+                }
+            }
+            break;
+        }
+        case 9:
+        {
+            int keyFilter;
+            do {
+                cout << "1. Фильтр труба" << endl
+                    << "2. Фильтр КС" << endl
+                    << "0. Назад" << endl;
+                cin.clear();
+                cin.ignore(10000, '\n');
+                cin >> keyFilter;
+            } while (cin.fail() || keyFilter < 0 || keyFilter > 2);
+
+            switch (keyFilter)
+            {
+            case 1:
+            {
+                filterPipe = pipeFilter(Pipes);
+                for (int i = 0; i < filterPipe.size(); i++) {
+                    printPipe(filterPipe[i]);
+                }
+                break;
+            }
+            case 2:
+            {
+                cout << "Пока в разработке";
+                break;
+            }
+            default:
+                cout << "Ошибка";
+                break;
+            }
+
         }
         case 0:
         {
