@@ -27,6 +27,7 @@ struct KS {
 	int numShop;
 	int numShopWorking;
 	double effective;
+	int numberInSort;
 };
 
 
@@ -81,7 +82,7 @@ KS createKS(const int& maxId) {
 	cin.ignore();
 	getline(cin, KS1.name);
 
-		
+	KS1.numberInSort = -1;
 
 	do {
 		int i = 0;
@@ -302,7 +303,7 @@ void saveKS(const vector<KS>& KS1, const string & fileName) {
 	if (fout.is_open())
 	{
 		for (int i = 0; i < KS1.size(); i++) {
-			fout << KS1[i].id << endl << KS1[i].name << endl << KS1[i].numShop << endl << KS1[i].numShopWorking << endl << KS1[i].effective << endl;
+			fout << KS1[i].id << endl << KS1[i].name << endl << KS1[i].numShop << endl << KS1[i].numShopWorking << endl << KS1[i].effective << endl << KS1[i].numberInSort << endl;;
 		}
 		fout.close();
 	}
@@ -327,6 +328,8 @@ vector <KS> loadKS(const int& Size, const string& fileName) {
 			KS1.numShopWorking = atoi(str.c_str());
 			getline(myfile, str);
 			KS1.effective = atoi(str.c_str());
+			getline(myfile, str);
+			KS1.numberInSort = atoi(str.c_str());
 			KSs1.push_back(KS1);
 		}
 		//fin.close();
@@ -546,6 +549,15 @@ int findNomerKS(const vector<KS>& KS, size_t id) {
 	return num;
 }
 
+int findNumSort(const  vector<KS> KS) {
+	int a = 0;
+	for (int i = 0; i < KS.size(); i++) {
+		if (KS[i].numberInSort == -1) {
+			a++;
+		}
+	}
+	return a;
+}
 
 
 
@@ -1025,10 +1037,93 @@ int main()
 				}
 
 				case 4:
+
+
 				{
-					vector <int> sort;
+
+					int maxNum = 1;
+
+					for (int i = 0; i < KSs.size(); i++) {
+						int count = 0;
+						int countminus = 0;
+						for (int j = 0; j < Pipes.size(); j++) {
+							if (dataInsident[i][j] == 1) {
+								count++;
+
+							}
+							if (dataInsident[i][j] == -1) {
+								countminus++;
+
+							}
+
+
+						}
+						if (count != 0 && countminus == 0) {
+							KSs[i].numberInSort = maxNum;
+							
+
+						}
+					}
+
+					// Отбросить изолированные точки
+					for (int i = 0; i < KSs.size(); i++) {
+						int count = 0;
+						int countminus = 0;
+						for (int j = 0; j < Pipes.size(); j++) {
+							if (dataInsident[i][j] == 1) {
+								count++;
+
+							}
+							if (dataInsident[i][j] == -1) {
+								countminus++;
+
+							}
+
+
+						}
+						if (count == 0 && countminus == 0) {
+							KSs[i].numberInSort = 0;
+
+
+						}
+					}
+
+					
+
+					int numOfMinusOdin = findNumSort(KSs);
+					while (numOfMinusOdin > 0) {
+						for (int i = 0; i < KSs.size(); i++) {
+							if (KSs[i].numberInSort == maxNum) {
+								for (int j = 0; j < KSs.size(); j++) {
+									if (dataSmej[i][j] == 1) {
+										KSs[j].numberInSort = maxNum+1;
+										numOfMinusOdin--;
+									}
+								}
+							}
+						}
+						maxNum++;
+						
+					}
+
+					for (int i = 1; i <= maxNum; i++) {
+						for (int j = 0; j < KSs.size(); j++) {
+							if (KSs[j].numberInSort == i) {
+								cout << KSs[j].id << "  ";
+							}
+						}
+					}
+
+					for (int j = 0; j < KSs.size(); j++) {
+						KSs[j].numberInSort = -1;
+					}
+					cout << endl;
+
+					/*vector <int> sort;
 					int startingPoint=1;
 					vector <int> used;
+
+
 
 					for (int i = 0; i < KSs.size(); i++) {
 						int count=0;
@@ -1083,7 +1178,7 @@ int main()
 						cout << KSs[sort[i]].id << "  ";
 					}
 					cout << endl;
-
+					*/
 
 					break;
 				}
