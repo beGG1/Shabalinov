@@ -28,6 +28,7 @@ struct KS {
 	int numShopWorking;
 	double effective;
 	int numberInSort;
+	int minRast;
 };
 
 
@@ -83,6 +84,7 @@ KS createKS(const int& maxId) {
 	getline(cin, KS1.name);
 
 	KS1.numberInSort = -1;
+	KS1.minRast = -1;
 
 	do {
 		int i = 0;
@@ -151,99 +153,115 @@ void editPipe(vector <Pipe> &P) {
 	}
  }
 
+int findNomerKS(const vector<KS>& KS, size_t id) {
+	int num = -1;
+	for (int i = 0; i <= KS.size(); i++) {
+		if (KS[i].id == id) {
+			num = i;
+			break;
+		}
+	}
+	return num;
+}
+
 	// Ввод и вывот цехов в работу КС
 void editKS(vector <KS> &KS1) {
 	double i;
-	int key;
+	int m;
+	int keys;
 	do {
 		cin.clear();
 		cin.ignore(10000, '\n');
 		cout << "Введите id КС ";
 		cin >> i;
-		key = (int)i;
-	} while (cin.fail() || key < 0);
+		keys = (int)i;
+	} while (cin.fail() || keys < 0);
 
-	for (int m = 0; m < KS1.size(); m++) {
-		if (KS1[m].id == key) {
+	m = findNomerKS(KS1, keys);
+
+	//for (int m = 0; m < KS1.size(); m++) {
+	//	if (KS1[m].id == keys) {
+	if (m!=-1){
 			bool check = true;
-			while (check) {
+				while (check) {
 
-				int k;
-				do {
-					cout << "1 - Ввести цех в работу" << endl
-						<< "2 - Вывести цех из работы" << endl
-						<< "0 - Назад" << endl;
-					cin.clear();
-					cin.ignore(10000, '\n');
-					cin >> k;
-				} while (cin.fail() || k < 0 || k>2);
-				switch (k)
-				{
-				case 1:
-				{
-					if (KS1[m].numShop == KS1[m].numShopWorking) {
-						cout << "Максимальное количество рабочих цехов" << endl;
-						break;
-					}
-					else {
-						int shops;
+					int k;
 						do {
-							cin.clear();
-							cin.ignore(10000, '\n');
-							cout << "Количество цехов: ";
-							cin >> shops;
-						} while (shops <= 0 || cin.fail());
-						if (KS1[m].numShopWorking + shops <= KS1[m].numShop) {
-							KS1[m].numShopWorking += shops;
-							KS1[m].effective = double(KS1[m].numShopWorking) / double(KS1[m].numShop) * 100;
-							break;
+							cout << "1 - Ввести цех в работу" << endl
+								<< "2 - Вывести цех из работы" << endl
+								<< "0 - Назад" << endl;
+								cin.clear();
+								cin.ignore(10000, '\n');
+								cin >> k;
+						} while (cin.fail() || k < 0 || k>2);
+						switch (k)
+						{
+						case 1:
+						{
+							if (KS1[m].numShop == KS1[m].numShopWorking) {
+								cout << "Максимальное количество рабочих цехов" << endl;
+								break;
+							}
+							else {
+								int shops;
+								do {
+									cin.clear();
+									cin.ignore(10000, '\n');
+									cout << "Количество цехов: ";
+									cin >> shops;
+								} while (shops <= 0 || cin.fail());
+								if (KS1[m].numShopWorking + shops <= KS1[m].numShop) {
+									KS1[m].numShopWorking += shops;
+									KS1[m].effective = double(KS1[m].numShopWorking) / double(KS1[m].numShop) * 100;
+									break;
+								}
+								else {
+									cout << "Можно добавть максимум " << -KS1[m].numShopWorking + KS1[m].numShop
+										<< " цехов" << endl;
+									break;
+								}
+							}
 						}
-						else {
-							cout << "Можно добавть максимум " << -KS1[m].numShopWorking + KS1[m].numShop
-								<< " цехов" << endl;
-							break;
-						}
-					}
-				}
 
-				case 2:
-				{
-					if (KS1[m].numShop == 0) {
-						cout << "Минимальное количество рабочих цехов" << endl;
-						break;
-					}
-					else {
-						int shops;
-						do {
-							cin.clear();
-							cin.ignore(10000, '\n');
-							cout << "Количество цехов: ";
-							cin >> shops;
-						} while (shops <= 0 || cin.fail());
-						if (KS1[m].numShopWorking - shops >= 0) {
-							KS1[m].numShopWorking -= shops;
-							KS1[m].effective = double (KS1[m].numShopWorking) /  double(KS1[m].numShop) * 100;
+						case 2:
+						{
+							if (KS1[m].numShop == 0) {
+								cout << "Минимальное количество рабочих цехов" << endl;
+								break;
+							}
+							else {
+								int shops;
+								do {
+									cin.clear();
+									cin.ignore(10000, '\n');
+									cout << "Количество цехов: ";
+									cin >> shops;
+								} while (shops <= 0 || cin.fail());
+								if (KS1[m].numShopWorking - shops >= 0) {
+									KS1[m].numShopWorking -= shops;
+									KS1[m].effective = double(KS1[m].numShopWorking) / double(KS1[m].numShop) * 100;
+									break;
+								}
+								else {
+									cout << "Можно убрать максимум " << KS1[m].numShopWorking
+										<< " цехов" << endl;
+									break;
+								}
+							}
+						}
+						case 0:
+						{
+							check = false;
 							break;
 						}
-						else {
-							cout << "Можно убрать максимум " << KS1[m].numShopWorking
-								<< " цехов" << endl;
+						default:
+							cout << "Ошибка " << endl;
 							break;
 						}
-					}
+						//}
+					//}
 				}
-				case 0:
-				{
-					check = false;
-					break;
-				}
-				default:
-					cout << "Ошибка " << endl;
-					break;
-				}
-			}
-		}
-		else
+		if (m==-1)
 		{
 			cout << "id не найден" << endl;
 		}
@@ -303,7 +321,7 @@ void saveKS(const vector<KS>& KS1, const string & fileName) {
 	if (fout.is_open())
 	{
 		for (int i = 0; i < KS1.size(); i++) {
-			fout << KS1[i].id << endl << KS1[i].name << endl << KS1[i].numShop << endl << KS1[i].numShopWorking << endl << KS1[i].effective << endl << KS1[i].numberInSort << endl;;
+			fout << KS1[i].id << endl << KS1[i].name << endl << KS1[i].numShop << endl << KS1[i].numShopWorking << endl << KS1[i].effective << endl << KS1[i].numberInSort << endl << KS1[i].minRast << endl;
 		}
 		fout.close();
 	}
@@ -330,6 +348,8 @@ vector <KS> loadKS(const int& Size, const string& fileName) {
 			KS1.effective = atoi(str.c_str());
 			getline(myfile, str);
 			KS1.numberInSort = atoi(str.c_str());
+			getline(myfile, str);
+			KS1.minRast = atoi(str.c_str());
 			KSs1.push_back(KS1);
 		}
 		//fin.close();
@@ -538,16 +558,7 @@ int findNomerPipe(const vector<Pipe>& Pipe, size_t id) {
 	return num;
 }
 
-int findNomerKS(const vector<KS>& KS, size_t id) {
-	int num = -1;
-	for (int i = 0; i <= KS.size(); i++) {
-		if (KS[i].id == id) {
-			num = i;
-			break;
-		}
-	}
-	return num;
-}
+
 
 int findNumSort(const  vector<KS> KS) {
 	int a = 0;
@@ -927,13 +938,15 @@ int main()
 					cout << "2. Добавить соединение" << endl;
 					cout << "3. Показать" << endl;
 					cout << "4. Топологическая сортировка" << endl;
+					cout << "5. Максимальная пропускная способность" << endl;
+					cout << "6. Кратчайший путь" << endl;
 					cout << "0. Выход" << endl;
 					cin.clear();
 					cin.ignore(10000, '\n');
 					double idP;
 					cin >> idP;
 					grafKey = (int)idP;
-				} while (cin.fail() || grafKey < 0 || grafKey>4);
+				} while (cin.fail() || grafKey < 0 || grafKey>6);
 				switch (grafKey)
 				{
 				case 1:
@@ -1179,6 +1192,307 @@ int main()
 					}
 					cout << endl;
 					*/
+
+					break;
+				}
+
+				case 5:
+				{
+					
+					int maxNum = 1;
+
+					int Insident[maxKS][maxPipe];
+					int Smej[maxKS][maxKS];
+					for (int i = 0; i < maxKS; i++) {
+						for (int j = 0; j < maxPipe; j++) {
+							Insident[i][j] = dataInsident[i][j];											
+						}
+					}
+					for (int i = 0; i < maxKS; i++) {
+						for (int j = 0; j < maxKS; j++) {
+							Smej[i][j] = 0;
+						}
+					}
+
+					for (int i = 0; i < KSs.size(); i++) {
+						if (KSs[i].numShopWorking == 0) {
+							for (int j = 0; j < Pipes.size(); j++) {											//Если numshopworking == 0
+								if (Insident[i][j] != 0) {
+									for (int m = 0; m < KSs.size(); m++) {
+										Insident[m][j] = 0;
+									}
+								}
+								
+							}
+						}
+					}
+
+
+					for (int i = 0; i < Pipes.size(); i++) {
+						if (Pipes[i].repear ) {
+							for (int j = 0; j < KSs.size(); j++) {
+								
+									Insident[j][i] = 0;
+								
+							}
+						}
+					}
+
+					for (int j = 0; j < Pipes.size(); j++) {
+						int nach=-1;																		//Заполнение смежности
+						int fin=-1;
+						for (i = 0; i < KSs.size(); i++) {
+							if (Insident[i][j] == -1) {
+								fin = i;
+							}
+							if (Insident[i][j] == 1) {
+								nach = i;
+							}
+
+						}
+						if (nach != -1 && fin != -1) {
+							Smej[nach][fin] = 1;
+						}
+
+					}
+
+					for (int i = 0; i < KSs.size(); i++) {
+						int count = 0;
+						int countminus = 0;																//Находим добывающие
+						for (int j = 0; j < Pipes.size(); j++) {
+							if (Insident[i][j] == 1) {
+								count++;
+
+							}
+							if (Insident[i][j] == -1) {
+								countminus++;
+
+							}
+
+
+						}
+						if (count != 0 && countminus == 0) {
+							KSs[i].numberInSort = maxNum;
+
+
+						}
+					}
+
+																									// Отбросить изолированные точки
+					for (int i = 0; i < KSs.size(); i++) {
+						int count = 0;
+						int countminus = 0;
+						for (int j = 0; j < Pipes.size(); j++) {
+							if (Insident[i][j] == 1) {
+								count++;
+
+							}
+							if (Insident[i][j] == -1) {
+								countminus++;
+
+							}
+
+
+						} 
+						if (count == 0 && countminus == 0) {
+							KSs[i].numberInSort = 0;
+
+
+						}
+					}
+
+					int propusk = 0;
+					for (int i = 0; i < KSs.size(); i++) {
+						if (KSs[i].numberInSort == 1) {
+							propusk = propusk + KSs[i].numShopWorking;
+						}
+					}
+					cout << "Максимальная пропускная способность в " << propusk << " цехов" << endl;
+
+					for (int j = 0; j < KSs.size(); j++) {
+						KSs[j].numberInSort = -1;
+					}
+
+					break;
+				}
+
+				case 6:
+				{
+
+					double idK1;
+					int idKS1;
+					do {
+						cout << "Введите id начальной КС" << endl;
+						cin.clear();
+						cin.ignore(10000, '\n');
+						cin >> idK1;
+						idKS1 = (int)idK1;
+					} while (cin.fail() || idKS1 < 0 || idKS1 > maxIdKS - 1);
+
+					int start = findNomerKS(KSs, idKS1);
+
+					double idK2;
+					int idKS2;
+					do {
+						cout << "Введите id конечной КС" << endl;
+						cin.clear();
+						cin.ignore(10000, '\n');
+						cin >> idK2;
+						idKS2 = (int)idK2;
+					} while (cin.fail() || idKS2 < 0 || idKS2 > maxIdKS - 1);
+
+
+					int finish = findNomerKS(KSs, idKS2);
+
+
+					if (start == -1 || finish == -1) {
+						cout << "Id не найдены" << endl;
+						break;
+					}
+
+					int minRast = -1;
+					int Rast = -1;
+
+
+
+
+					int maxNum = 1;
+
+					for (int i = 0; i < KSs.size(); i++) {
+						int count = 0;
+						int countminus = 0;
+						for (int j = 0; j < Pipes.size(); j++) {
+							if (dataInsident[i][j] == 1) {
+								count++;
+
+							}
+							if (dataInsident[i][j] == -1) {
+								countminus++;
+
+							}
+
+
+						}
+						if (count != 0 && countminus == 0) {
+							KSs[i].numberInSort = maxNum;
+
+
+						}
+					}
+
+					// Отбросить изолированные точки
+					for (int i = 0; i < KSs.size(); i++) {
+						int count = 0;
+						int countminus = 0;
+						for (int j = 0; j < Pipes.size(); j++) {
+							if (dataInsident[i][j] == 1) {
+								count++;
+
+							}
+							if (dataInsident[i][j] == -1) {
+								countminus++;
+
+							}
+
+
+						}
+						if (count == 0 && countminus == 0) {
+							KSs[i].numberInSort = 0;
+
+
+						}
+					}
+
+
+
+					int numOfMinusOdin = findNumSort(KSs);
+					while (numOfMinusOdin > 0) {
+						for (int i = 0; i < KSs.size(); i++) {
+							if (KSs[i].numberInSort == maxNum) {
+								for (int j = 0; j < KSs.size(); j++) {
+									if (dataSmej[i][j] == 1) {
+										KSs[j].numberInSort = maxNum + 1;
+										numOfMinusOdin--;
+									}
+								}
+							}
+						}
+						maxNum++;
+
+					}
+
+					bool check = true;
+
+					int smej[maxKS][maxKS];
+
+					for (int i=0;i<maxKS;i++){
+						for (int j = 0; j < maxKS; j++) {
+							smej[i][j] = dataSmej[i][j];
+						}
+					}
+
+					if (KSs[start].numberInSort > KSs[finish].numberInSort) {
+						cout << "Путь не найден" << endl;
+						break;
+					}
+					KSs[start].minRast = 0;
+					//for (int i = KSs[start].numberInSort; i < KSs[finish].numberInSort; i++) {
+						for (int j = 0; j < KSs.size(); j++) {
+							if (smej[start][j] == 1) {
+								int pipe;
+								for (int r = 0; r < Pipes.size(); r++) {
+									if (dataInsident[start][r] == 1 && dataInsident[j][r] == -1) {
+										pipe = r;
+									}
+								}
+
+								KSs[j].minRast = Pipes[pipe].lenght;
+
+							}
+							
+						}
+					//}
+
+
+						for (int m = KSs[start].numberInSort + 1; m < KSs[finish].numberInSort; m++) {
+
+							for (int i = 0; i < KSs.size(); i++)
+								if (KSs[i].numberInSort == m && KSs[i].minRast != -1) {
+
+									for (int j = 0; j < KSs.size(); j++) {
+										if (smej[i][j] == 1) {
+											int pipe;
+											for (int r = 0; r < Pipes.size(); r++) {
+												if (dataInsident[i][r] == 1 && dataInsident[j][r] == -1) {
+													pipe = r;
+												}
+											}
+
+											if (KSs[j].minRast == -1 || KSs[j].minRast > KSs[i].minRast + Pipes[pipe].lenght) {
+												KSs[j].minRast = KSs[i].minRast + Pipes[pipe].lenght;
+											}
+										}
+
+									}
+
+								}
+						}
+
+
+
+
+							if (KSs[finish].minRast != -1) {
+								cout << "Минимальное расстояние " << KSs[finish].minRast << endl;
+							}
+							else {
+								cout << "Путь не существует" << endl;
+							}
+
+							for (int i = 0; i<KSs.size(); i++) {
+								KSs[i].minRast = -1;
+								KSs[i].numberInSort = -1;
+							}
+
 
 					break;
 				}
