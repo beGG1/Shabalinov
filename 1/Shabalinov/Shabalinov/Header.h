@@ -6,6 +6,8 @@
 #include <Windows.h> // Нужно для распознания кирилицы 
 #include <vector>
 #include <string>
+#include "Graph.h"
+
 using namespace std;
 
 	void print_menu();
@@ -15,8 +17,8 @@ using namespace std;
 	vector <KS> load_ks(const string& fileName);
 	void edit_pipe(vector<Pipe>& Pipe);
 	void edit_ks(vector<KS>& KSs);
-	void deletePipe(vector <Pipe>& P);
-	void deleteKS(vector <KS>& K);
+	void deletePipe(vector <Pipe>& P, Graph &G);
+	void deleteKS(vector <KS>& K,Graph &G);
 	vector <Pipe> pipe_filter(vector <Pipe>& P);
 	vector <KS> ks_filter_effect(vector <KS>& KS1, bool key, double number);
 	vector <KS> ks_filter_name(vector <KS>& KS1, string Name);

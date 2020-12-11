@@ -139,12 +139,14 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Graph.cpp" />
     <ClCompile Include="KS.cpp" />
     <ClCompile Include="Pipe.cpp" />
     <ClCompile Include="Shabalinov.cpp" />
     <ClCompile Include="Source.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Graph.h" />
     <ClInclude Include="Header.h" />
     <ClInclude Include="KS.h" />
     <ClInclude Include="Pipe.h" />

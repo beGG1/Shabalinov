@@ -7,6 +7,7 @@
 #include <vector>
 #include <string>
 #include "Header.h"
+#include "Graph.h"
 
 using namespace std;
 
@@ -21,9 +22,7 @@ void print_menu() {
 		<< "7. Загрузить" << endl
 		<< "8. Удалить" << endl
 		<< "9. Фильтр" << endl
-		<< "10. Заменить основу на фильтр (труба)" << endl
-		<< "11. Заменить основу на фильтр (КС)" << endl
-		<< "12. Сеть" << endl
+		<< "10. Сеть" << endl
 		<< "0. Выход" << endl << endl;
 }
 
@@ -265,7 +264,8 @@ void edit_ks(vector<KS>& KSs)
 }
 
 //Удалить Трубу
-void deletePipe(vector <Pipe>& P) {
+void deletePipe(vector <Pipe>& P, Graph &G)
+{
 	int i;
 
 	//Количество труб, которых надо удалить
@@ -303,6 +303,7 @@ void deletePipe(vector <Pipe>& P) {
 			cout << "Ошибка. Трубы с таким id не существует" << endl;
 			break;
 		}
+		G.pipe_delete(index);
 
 		P.erase(P.begin() + index); //https://coderoad.ru/875103/Как-удалить-элемент-из-std-vector-по-индексу
 	}
@@ -313,7 +314,8 @@ void deletePipe(vector <Pipe>& P) {
 
 
 //Удалить KS
-void deleteKS(vector <KS>& K) {
+void deleteKS(vector <KS>& K, Graph &G) 
+{
 	int i;
 
 	//Количество КС, которых надо удалить
@@ -351,8 +353,10 @@ void deleteKS(vector <KS>& K) {
 			cout << "Ошибка. Трубы с таким id не существует" << endl;
 			break;
 		}
-
+		
+		G.ks_delete(index);
 		K.erase(K.begin() + index); //https://coderoad.ru/875103/Как-удалить-элемент-из-std-vector-по-индексу
+		
 	}
 
 
