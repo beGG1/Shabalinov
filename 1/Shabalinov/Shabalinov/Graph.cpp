@@ -108,7 +108,7 @@ void Graph::add_conection(vector<KS> KSs, vector<Pipe> Pipes, int max_id_ks, int
 		return;
 	}
 
-	for (int j = 0; j < Pipes.size(); j++) {
+	for (int j = 0; j < Pipe1 - 1; j++) {
 		if (Insident[rebro][j] != 0) {
 			cout << "Это ребро уже было использованно" << endl;
 			break;
@@ -235,7 +235,7 @@ void Graph::top_sort(vector<KS> &KSs, vector<Pipe> &Pipes, int max_id_ks, int ma
 
 	if (show_result) {
 		for (int i = 1; i <= maxNum; i++) {
-			for (int j = 0; j < KS1; j++) {
+			for (int j = 0; j < KSs.size(); j++) {
 				if (KSs[j].get_number_in_sort() == i) {
 					cout << KSs[j].get_id() << "  ";
 				}
